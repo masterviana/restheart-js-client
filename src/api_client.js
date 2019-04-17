@@ -3,6 +3,7 @@ let security = require('./security')
 let debug = console.log //require('debug')('apiclient')
 let global = require('./global');
 
+
 let ClientApi = function () {
 
 
@@ -109,18 +110,16 @@ ClientApi.prototype = {
             options.headers['Authorization'] = security.authToken;
         }
 
-        console.log('headres ', headerParams)
-        options.headers =  Object.assign({}, options.headers);
-        if(headerParams  )
-        {
-            for(let key in headerParams ){
+        options.headers = Object.assign({}, options.headers);
+        if (headerParams) {
+            for (let key in headerParams) {
                 options.headers[key] = headerParams[key]
             }
         }
 
 
 
-        debug('Headers for request is ', options.headers );
+        // debug('Headers for request is ', options.headers);
 
 
         function callback(error, response, body) {
@@ -133,11 +132,12 @@ ClientApi.prototype = {
                 if (response.statusCode >= 200 && response.statusCode < 300) {
                     debug('response with sucess ', response.statusCode)
 
-                    let body = response.body ? JSON.parse(response.body): {};
+                    let body = response.body ? JSON.parse(response.body) : {};
                     let respJson = {
                         statusCode: response.statusCode,
                         body: body
                     }
+                    
                     next(null, respJson);
                 } else {
                     //debug('Full response ', response)

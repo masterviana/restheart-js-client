@@ -26,9 +26,9 @@ ResultSet.prototype.parseRaw = function (rawQuery, next) {
                 async.each(rawQuery.body._embedded,
                     (item, inext) => {
                         let y = new model();
-                        let itemParsed = y.parseFromRaw(item);
+                        let itemParsed = y.parseRaw(item);
                         self.resultItens.push(itemParsed);
-                        console.log('item parsed ', itemParsed);
+                        // console.log('item parsed ', itemParsed);
                         inext();
                     },
                     (err) => {

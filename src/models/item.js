@@ -1,5 +1,3 @@
-
-
 /**
  *  This class represent the model of item
  * 
@@ -8,16 +6,16 @@
 
 var Model = function () {
 
-    this.iod = null;
+    this.etag = null;
     this.id = null;
 }
 
 Model.prototype = {
 
 
-    parseFromRaw: function (item) {
-        this.id = item._id;
-        this.iod = item._etag ? item._etag.$oid ? item._etag.$oid : '' : '';
+    parseRaw: function (item) {
+        this.id = item._id.$oid;
+        this.etag = item._etag ? item._etag.$oid ? item._etag.$oid : '' : '';
         for (var prop in item) {
             if (prop != '_id' && prop != '_etag') {
                 this[prop] = item[prop];

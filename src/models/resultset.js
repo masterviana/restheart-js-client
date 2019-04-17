@@ -18,6 +18,8 @@ let ResultSet = function () {
 
 ResultSet.prototype.parseRaw = function (rawQuery, next) {
     let self = this;
+
+    console.log('parseRaw body ', rawQuery)
     //console.log('Raw Query ', rawQuery);
     async.waterfall([
 
@@ -43,8 +45,10 @@ ResultSet.prototype.parseRaw = function (rawQuery, next) {
                         }
                     });
             } else {
-
-                next(null, {});
+                let ret = rawQuery && rawQuery.statusCode ? {
+                    statusCode: rawQuery.statusCode
+                } : {};
+                next(null, ret);
             }
 
         }

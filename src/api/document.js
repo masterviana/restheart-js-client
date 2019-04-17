@@ -79,7 +79,7 @@ Document.prototype = {
 
     },
 
-    deleteDocument: function (dbName, coll, rowId, next) {
+    deleteDocument: function (dbName, coll, docId, etag, next) {
         let self = this;
 
         async.waterfall([
@@ -97,10 +97,10 @@ Document.prototype = {
             },
             (inext) => {
 
-                let path = '/' + dbName + '/' + coll;
+                let path = '/' + dbName + '/' + coll + '/' + docId;
 
                 Api.request(path, 'DELETE', {}, null, {
-                    "If-Match": rowId
+                    "If-Match": etag
                 }, null, null, {}, (err, data) => {
                     resultSet.parseRaw(data, (er, d) => {
                         inext(err, d);

@@ -40,8 +40,8 @@ function getDocument(dbName, coll, docId) {
 }
 
 
-function deleteRow(dbName, coll, rowId) {
-    Document.deleteRow(dbName, coll, rowId, (err, data) => {
+function deleteDocument(dbName, coll, rowId, etag) {
+    Document.deleteDocument(dbName, coll, rowId, etag,  (err, data) => {
         if (err)
             console.log('Error from adding row ', err)
         else
@@ -55,17 +55,17 @@ function deleteRow(dbName, coll, rowId) {
  */
 // let dbName = 'benfica'
 // let collection = 'jogadores'
-// let body = {
-//     name: 'pizzi',
-//     age: '29',
-//     number: 17
-// }
+// // // let body = {
+// // //     name: 'pizzi',
+// // //     age: '29',
+// // //     number: 17
+// // // }
 // let body2 = {
-//     name: 'samaris',
-//     age: '29',
-//     number: 17
+//     name: 'el nino',
+//     age: '65',
+//     number: 89
 // }
-// addDocument(dbName, collection, body2);
+//  addDocument(dbName, collection, body2);
 
 
 /**
@@ -82,17 +82,18 @@ function deleteRow(dbName, coll, rowId) {
  * 
  * Get Document by Id
  */
-let dbName = 'benfica'
-let collection = 'jogadores'
-let docId = '5cb70d6dde0fb791d814a277'
-getDocument(dbName, collection, docId)
+// let dbName = 'benfica'
+// let collection = 'jogadores'
+// let docId = '5cb70d6dde0fb791d814a277'
+// getDocument(dbName, collection, docId)
 
 /**
  * 
  * Remove row from a collection
  */
-// let dbName = 'benfica'
-// let collection = 'jogadores'
-// let rowId = '5cb701ebde0fb791d814a01f'
-// deleteRow(dbName, collection, rowId)
+let dbName = 'benfica'
+let collection = 'jogadores'
+let rowId = '5cb73fb969b4f8faa2542091'
+let etag = '5cb73fb91ed7970009f14818'
+deleteDocument(dbName, collection, rowId, etag)
 

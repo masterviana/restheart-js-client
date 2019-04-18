@@ -3,6 +3,7 @@
  * 
  * It read all the property of an object
  */
+let _ = require('underscore')
 
 var Model = function () {
 
@@ -14,14 +15,20 @@ Model.prototype = {
 
 
     parseRaw: function (item) {
-        this.id = item._id.$oid;
-        this.etag = item._etag ? item._etag.$oid ? item._etag.$oid : '' : '';
-        for (var prop in item) {
-            if (prop != '_id' && prop != '_etag') {
-                this[prop] = item[prop];
+        console.log('parse Raw ', item);
+        if (_.isEmpty(item)) {
+            return {};
+        } else {
+            this.id = item._id.$oid;
+            this.etag = item._etag ? item._etag.$oid ? item._etag.$oid : '' : '';
+            for (var prop in item) {
+                if (prop != '_id' && prop != '_etag') {
+                    this[prop] = item[prop];
+                }
             }
+            return this;
         }
-        return this;
+
     },
 
 

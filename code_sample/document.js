@@ -41,7 +41,17 @@ function getDocument(dbName, coll, docId) {
 
 
 function deleteDocument(dbName, coll, rowId, etag) {
-    Document.deleteDocument(dbName, coll, rowId, etag,  (err, data) => {
+    Document.deleteDocument(dbName, coll, rowId, etag, (err, data) => {
+        if (err)
+            console.log('Error from adding row ', err)
+        else
+            console.log('LIST ', data);
+    })
+
+}
+
+function updateDocument(dbName, coll, rowId, body) {
+    Document.updateDocument(dbName, coll, rowId, body, (err, data) => {
         if (err)
             console.log('Error from adding row ', err)
         else
@@ -51,28 +61,48 @@ function deleteDocument(dbName, coll, rowId, etag) {
 }
 
 /**
+ * sample of filters
+ * age equal 33
+ * ?filter={'age' : '33'}
+ * number greater them 50
+ * ?filter={'number' : {'$gte' : 50}}
+ * Less then 
+ * ?filter={'number' : {'$lte' : 50}}
+ * more at : https://restheart.org/learn/query-documents/
+ */
+function queryDocument(dbName, coll, filter) {
+    Document.queryDocuments(dbName, coll, filter, (err, data) => {
+        if (err)
+            console.log('Error from adding row ', err)
+        else
+            console.log('query ', data);
+    })
+}
+
+
+/**
  * Add row to a collection
  */
-// let dbName = 'benfica'
-// let collection = 'jogadores'
-// // // let body = {
-// // //     name: 'pizzi',
-// // //     age: '29',
-// // //     number: 17
-// // // }
-// let body2 = {
-//     name: 'el nino',
-//     age: '65',
-//     number: 89
-// }
-//  addDocument(dbName, collection, body2);
+let dbName = 'benfica'
+let collection = 'jogadores'
+// // let body = {
+// //     name: 'pizzi',
+// //     age: '29',
+// //     number: 17
+// // }
+let body2 = {
+    name: 'FEJSA',
+    age: '21',
+    number: 200
+}
+addDocument(dbName, collection, body2);
 
 
 /**
  * 
  * LIST ALL documents
  * 
-*/
+ */
 // let dbName = 'benfica'
 // let collection = 'jogadores'
 // listAllDocuments(dbName,collection )
@@ -91,9 +121,20 @@ function deleteDocument(dbName, coll, rowId, etag) {
  * 
  * Remove row from a collection
  */
-let dbName = 'benfica'
-let collection = 'jogadores'
-let rowId = '5cb73fb969b4f8faa2542091'
-let etag = '5cb73fb91ed7970009f14818'
-deleteDocument(dbName, collection, rowId, etag)
+// let dbName = 'benfica'
+// let collection = 'jogadores'
+// let rowId = '5cb73fa369b4f8faa2542088'
+// let etag = '5cb73fa31ed7970009f14817'
+// deleteDocument(dbName, collection, rowId, etag)
 
+/**
+ * 
+ * Remove row from a collection
+ */
+// let dbName = 'benfica'
+// let collection = 'jogadores'
+// let rowId = '5cb70d4ede0fb791d814a26d'
+// let newBody = {
+//     age : '342'
+// }
+// updateDocument(dbName, collection, rowId, newBody)

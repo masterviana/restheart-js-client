@@ -144,6 +144,77 @@ Document.prototype = {
 
 
     },
+    updateDocument: function (dbName, coll, docId, body, next) {
+        let self = this;
+
+        async.waterfall([
+            (inext) => {
+                if (dbName && dbName.length > 0) {
+                    inext()
+                } else {
+                    inext('You supply db name');
+                }
+            },
+            (inext) => {
+                if (coll && coll.length > 0) {
+                    inext()
+                } else {
+                    inext('You should supply collection name');
+                }
+            },
+            (inext) => {
+                let path = '/' + dbName + '/' + coll + '/' + docId;
+                debug('PATCH ', path, ' with body')
+                Api.request(path, 'PATCH', {}, null, null, body, null, {}, (err, data) => {
+                    let item = new Item()
+                    inext(null, item.parseRaw(data.body));
+                });
+            }
+        ], (err, data) => {
+            next(err, data);
+        })
+
+
+    },
+
+    /**
+     *  Query documents from collecation to learn more how to perform this 
+     * https://restheart.org/learn/query-documents/
+     * @param {*} dbName 
+     * @param {*} coll 
+     * @param {*} filter 
+     * @param {*} next 
+     */
+    queryDocuments: function (dbName, coll, filter, next) {
+        let self = this;
+
+        async.waterfall([
+            (inext) => {
+                if (dbName && dbName.length > 0) {
+                    inext()
+                } else {
+                    inext('You supply db name');
+                }
+            },
+            (inext) => {
+                if (coll && coll.length > 0) {
+                    inext()
+                } else {
+                    inext('You should supply collection name');
+                }
+            },
+            (inext) => {
+                let path = '/' + dbName + '/' + coll;
+                debug('PATCH ', path, ' with body')
+                Api.request(path, 'GET', {}, null, null, null, null, {}, (err, data) => {
+                    let item = new Item()
+                    inext(null, item.parseRaw(data.body));
+                });
+            }
+        ], (err, data) => {
+            next(err, data);
+        })
+    }
 
 
 }

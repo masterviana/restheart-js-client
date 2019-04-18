@@ -57,7 +57,7 @@ ClientApi.prototype = {
             throw new Error("You should supply a path for request!");
         }
 
-        if (!(httpMethod && (httpMethod == 'GET' || httpMethod == 'POST' || httpMethod == 'PUT' || httpMethod == 'DELETE'))) {
+        if (!(httpMethod && (httpMethod == 'GET' || httpMethod == 'POST' || httpMethod == 'PUT' || httpMethod == 'DELETE'  || httpMethod == 'PATCH'))) {
 
             throw new Error("You should supply the http method you want execute [POST|GET|PUT|DELETE]");
         }

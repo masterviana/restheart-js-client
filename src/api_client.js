@@ -26,8 +26,64 @@ ClientApi.prototype = {
     setAuthToken: function (authToken) {
         let token = security.setToken(authToken);
     },
+    isFileParam: function (param) {
+        // fs.ReadStream in Node.js and Electron (but not in runtime like browserify)
+        if (typeof require === 'function') {
+            let fs;
+            try {
+                fs = require('fs');
+            } catch (err) {}
+            if (fs && fs.ReadStream && param instanceof fs.ReadStream) {
+                return true;
+            }
+        }
+
+        // Buffer in Node.js
+        if (typeof Buffer === 'function' && param instanceof Buffer) {
+            return true;
+        }
+
+        // Blob in browser
+        if (typeof Blob === 'function' && param instanceof Blob) {
+            return true;
+        }
+
+        // File in browser (it seems File object is also instance of Blob, but keep this for safe)
+        if (typeof File === 'function' && param instanceof File) {
+            return true;
+        }
+
+        return false;
+    },
+    paramToString: function (param) {
+        if (param == undefined || param == null) {
+            return '';
+        }
+        if (param instanceof Date) {
+            return param.toJSON();
+        }
+
+        return param.toString();
+    },
+
+    normalizeParams: function (params) {
+        var newParams = {};
+        for (var key in params) {
+            if (params.hasOwnProperty(key) && params[key] != undefined && params[key] != null) {
+                var value = params[key];
+                if (this.isFileParam(value) || Array.isArray(value)) {
+                    newParams[key] = value;
+                } else {
+                    newParams[key] = this.paramToString(value);
+                }
+            }
+        }
+
+        return newParams;
+    },
 
     buildUrl: function (path, pathParams) {
+
         if (!path.match(/^\//)) {
             path = '/' + path;
         }
@@ -46,6 +102,18 @@ ClientApi.prototype = {
 
         return url;
     },
+    /**
+     * 
+     * @param {*} path 
+     * @param {*} httpMethod 
+     * @param {*} pathParams 
+     * @param {*} queryParams Should be supplied an array of each filter should be applied 
+     * @param {*} headerParams 
+     * @param {*} body 
+     * @param {*} contentTypes 
+     * @param {*} returnType 
+     * @param {*} next 
+     */
     request: function (path, httpMethod, pathParams,
         queryParams, headerParams, body, contentTypes,
         returnType, next) {
@@ -57,7 +125,7 @@ ClientApi.prototype = {
             throw new Error("You should supply a path for request!");
         }
 
-        if (!(httpMethod && (httpMethod == 'GET' || httpMethod == 'POST' || httpMethod == 'PUT' || httpMethod == 'DELETE'  || httpMethod == 'PATCH'))) {
+        if (!(httpMethod && (httpMethod == 'GET' || httpMethod == 'POST' || httpMethod == 'PUT' || httpMethod == 'DELETE' || httpMethod == 'PATCH'))) {
 
             throw new Error("You should supply the http method you want execute [POST|GET|PUT|DELETE]");
         }
@@ -70,7 +138,21 @@ ClientApi.prototype = {
          * prepare URL
          */
         let url = this.buildUrl(path, pathParams);
-        debug('Url to request is ', url);
+        let finalFilter = ''
+
+        if (queryParams) {
+            for (let i in queryParams) {
+                if (finalFilter.length > 4) {
+                    finalFilter += '&';
+                }
+                finalFilter += 'filter=' + JSON.stringify(queryParams[i]);
+
+            }
+            url += '?' + finalFilter;
+        }
+        console.log('URL ', url)
+
+
 
         var options = {
             url: url,
@@ -137,7 +219,7 @@ ClientApi.prototype = {
                         statusCode: response.statusCode,
                         body: body
                     }
-                    
+
                     next(null, respJson);
                 } else {
                     //debug('Full response ', response)

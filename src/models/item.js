@@ -15,7 +15,7 @@ Model.prototype = {
 
 
     parseRaw: function (item) {
-        console.log('parse Raw ', item);
+
         if (_.isEmpty(item)) {
             return {};
         } else {

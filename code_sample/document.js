@@ -83,19 +83,19 @@ function queryDocument(dbName, coll, filter) {
 /**
  * Add row to a collection
  */
-let dbName = 'benfica'
-let collection = 'jogadores'
+// let dbName = 'benfica'
+// let collection = 'jogadores'
 // // let body = {
 // //     name: 'pizzi',
 // //     age: '29',
 // //     number: 17
 // // }
-let body2 = {
-    name: 'FEJSA',
-    age: '21',
-    number: 200
-}
-addDocument(dbName, collection, body2);
+// let body2 = {
+//     name: 'FEJSA',
+//     age: '21',
+//     number: 200
+// }
+// addDocument(dbName, collection, body2);
 
 
 /**
@@ -138,3 +138,22 @@ addDocument(dbName, collection, body2);
 //     age : '342'
 // }
 // updateDocument(dbName, collection, rowId, newBody)
+
+
+
+/**
+ * Query document  with compose filter
+ * 
+ */
+let dbName = 'benfica'
+let collection = 'jogadores'
+let equal = {
+    age: '33'
+}
+let greater = {
+    'number': {
+        '$gte': 1
+    }
+}
+queryDocument(dbName, collection, [equal, greater])
+//let normalized = service.buildUrl(url, tmp);

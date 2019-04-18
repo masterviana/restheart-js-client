@@ -205,8 +205,8 @@ Document.prototype = {
             },
             (inext) => {
                 let path = '/' + dbName + '/' + coll;
-                debug('PATCH ', path, ' with body')
-                Api.request(path, 'GET', {}, null, null, null, null, {}, (err, data) => {
+                debug('TODEL  : FILTER ', path, ' with body')
+                Api.request(path, 'GET', {}, filter, null, null, null, {}, (err, data) => {
                     let item = new Item()
                     inext(null, item.parseRaw(data.body));
                 });

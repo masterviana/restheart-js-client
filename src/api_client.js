@@ -26,6 +26,10 @@ ClientApi.prototype = {
     setAuthToken: function (authToken) {
         let token = security.setToken(authToken);
     },
+    initialize : function (baseUrl)
+    {
+        this.baseUrl = baseUrl;
+    },
     isFileParam: function (param) {
         // fs.ReadStream in Node.js and Electron (but not in runtime like browserify)
         if (typeof require === 'function') {
